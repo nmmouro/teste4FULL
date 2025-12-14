@@ -83,12 +83,17 @@
   }
   
   /* ícone atendido */
-  td.status-icon{
-  icon-align:center;
+td.status-icon{
+  text-align:center;
   font-size:20px;
   font-weight:bold;
-  color:#00ff9c;
 }
+
+tr.status-atendido   td.status-icon{color:#00ff9c;}
+tr.status-cancelado  td.status-icon{color:#ff4d4d;}
+tr.status-andamento  td.status-icon{color:#ffcc00;}
+tr.status-concluido  td.status-icon{color:#7CFC00;}
+
 
   tr.status-andamento{background: rgba(219,147,112,0.18)}
 
@@ -96,14 +101,7 @@
   
   tr.status-concluido{background: rgba(0,200,120,0.06)}
   
-  @keyframes piscarCancelado {0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
-  
-  tr.status-cancelado{
-  background: rgba(155,17,17,0.18);
-  text-decoration:line-through;
-  animation:piscarCancelado 5s infinite;
-  }
-  
+   
   .small{
   font-size:12px;
   color:var(--muted);
@@ -271,23 +269,33 @@ else if (statusText.includes("andamento")) {
 
     html += `<tr class="${cls}">`;
 
-   for (let i = 0; i < cols.length; i++){
+for (let i = 0; i < cols.length; i++){
   const isStatusCol = (i === cols.length - 1);
-  const rawText = formatCell(cells[i]);
-  const lower = rawText.toLowerCase();
+  const raw = formatCell(cells[i]);
+  const txt = raw.toLowerCase();
 
-// ATENDIDO → ✔ (somente nas agendas)
-  if (
-  e {
-    html += `<td>${escapeHtml(rawText)}</td>`;
-  }  isStatusCol &&
-    (containerId === "agenda") &&
-    lower.includes("atendido")
-  ){
-    html += `<td class="status-icon">✔</td>`;
+  if (isStatusCol){
+    // ATENDIDO / CONCLUÍDO → ✔
+    if (txt.includes("atendido") || txt.includes("concluido")){
+      html += `<td class="status-icon">✔</td>`;
+    }
+    // CANCELADO → ✖
+    else if (txt.includes("cancelado")){
+      html += `<td class="status-icon">✖</td>`;
+    }
+    // ANDAMENTO → ⏳
+    else if (txt.includes("andamento")){
+      html += `<td class="status-icon">⏳</td>`;
+    }
+    // fallback
+    else{
+      html += `<td>${escapeHtml(raw)}</td>`;
+    }
   }
-  els
-}     
+  else{
+    html += `<td>${escapeHtml(raw)}</td>`;
+  }
+}
 
       html += "</tr>";
   });
