@@ -23,7 +23,7 @@
   height:100%;
   margin:0;
   background:var(--bg);color:#fff;
-  font-family:Inter,Segoe UI,Arial,sans-serif
+  font-family:Inter,Segoe UI,Arial,sans-serif;
   }
   
   header{
@@ -32,7 +32,7 @@
   align-items:center;
   padding:12px 20px;
   background:#020617;
-  border-bottom:1px solid rgba(255,255,255,0.03)
+  border-bottom:1px solid rgba(255,255,255,0.03);
   }
   
   header img{height:66px}
@@ -45,44 +45,43 @@
   grid-template-rows:1fr 1fr 1fr;
   gap:12px;
   height:calc(100vh - 80px);
-  box-sizing:border-box
+  box-sizing:border-box;
   }
   
   .card{
   background:var(--card);
   border-radius:10px;
   padding:12px;
-  overflow:auto
+  overflow:auto;
   }
   
   .card h2{
   margin:0 0 8px;
   color:var(--accent);
   font-size:18px;
-  text-align:center
+  text-align:center;
   }
   
   table{
   width:100%;
   border-collapse:collapse;
-  font-size:14px
+  font-size:14px;
   }
-  
+
+  th, td{
+  padding:8px;
+  text-align:left;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  }
   thead th{
   position:sticky;
   top:0;
   background:rgba(255,255,255,0.02);
   }
   
-  th, td{
-  padding:8px;
-  text-align:left;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis
-  }
-  
-   /* ícone atendido */
+  /* ícone atendido */
   td.status-icon{
   icon-align:center;
   font-size:20px;
@@ -101,14 +100,14 @@
   tr.status-cancelado{
   background: rgba(155,17,17,0.18);
   text-decoration:line-through;
-  animation:piscarCancelado 5s infinite
+  animation:piscarCancelado 5s infinite;
   }
   
   .small{
-  font-size:12px
+  font-size:12px;
   color:var(--muted);
   text-align:center;
-  margin-top:6px
+  margin-top:6px;
   }
  
   /* Cabeçalho azul padrão
@@ -281,20 +280,7 @@ else if (statusText.includes("andamento")) {
   const rawText = formatCell(cells[i]);
   const lower = rawText.toLowerCase();
 
-  // ATENDIDO → ✔ (somente nas agendas)
-  if (
-    isStatusCol &&
-    (containerId === "agenda" || containerId === "carousel-social") &&
-    lower.includes("atendido")
-  ){
-    html += `<td class="status-icon">✔</td>`;
-  }
-  else {
-    html += `<td>${escapeHtml(rawText)}</td>`;
-  }
-}
-
-    html += "</tr>";
+      html += "</tr>";
   });
 
   html += "</tbody></table>";
