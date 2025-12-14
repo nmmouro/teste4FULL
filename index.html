@@ -265,6 +265,9 @@ else if (statusText.includes("concluido")) {
 else if (statusText.includes("andamento")) {
   cls = "status-andamento";
 }
+    else if (statusText.includes("atendido")) {
+  cls = "status-atendido";
+}
 
 
     html += `<tr class="${cls}">`;
