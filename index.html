@@ -322,13 +322,11 @@ async function fetchSheet(tab){
       fetchSheet(TAB_PAINEL),
       fetchSheet(TAB_AGENDA),
       fetchSheet(TAB_SS),
-      fetchSheet(TAB_AVISOS)
     ]);
 
     renderTable("painel", p);
     renderTable("agenda", a);
-    renderTable("carousel-social", s);
-    renderTable("carousel-avisos", v);
+    renderTable("csocial", s);
 
   } catch(err){
     console.error("Erro ao carregar GViz:", err);
