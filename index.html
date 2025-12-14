@@ -260,12 +260,7 @@ function renderTable(containerId, g){
 if (statusText.includes("cancelado")) {
   cls = "status-cancelado";
 }
-else if (
-  (containerId === "agenda" || containerId === "carousel-social") &&
-  statusText.includes("atendido")
-) {
-  cls = "status-atendido";
-}
+
 else if (statusText.includes("concluido")) {
   cls = "status-concluido";
 }
@@ -280,6 +275,19 @@ else if (statusText.includes("andamento")) {
   const isStatusCol = (i === cols.length - 1);
   const rawText = formatCell(cells[i]);
   const lower = rawText.toLowerCase();
+
+// ATENDIDO → ✔ (somente nas agendas)
+  if (
+  e {
+    html += `<td>${escapeHtml(rawText)}</td>`;
+  }  isStatusCol &&
+    (containerId === "agenda") &&
+    lower.includes("atendido")
+  ){
+    html += `<td class="status-icon">✔</td>`;
+  }
+  els
+}     
 
       html += "</tr>";
   });
