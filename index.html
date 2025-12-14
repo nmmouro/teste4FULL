@@ -248,10 +248,10 @@ function formatCell(cell){
 
    /* regras de largura por header */
 const columnRules = [
-  { match: /Data|Hora/i,   cls: "col-sm" },
-  { match: /data/i,              cls: "col-md" },
-  { match: /placa/i,             cls: "col-sm" },
-  { match: /veículo|veiculo/i,   cls: "col-lg" },
+  { match: /data|hora|veículo|passageiro/i,   cls: "col-sm" },
+  { match: /empregado|setor|motivo/i,              cls: "col-md" },
+  { match: /passageiro/motivo/i,             cls: "col-sm" },
+  { match: /itinerario/i,   cls: "col-lg" },
   { match: /motorista|empregado/i, cls: "col-lg" },
   { match: /destino|origem/i,    cls: "col-xl" },
   { match: /status/i,            cls: "col-xs col-status" }
