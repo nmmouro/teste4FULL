@@ -55,7 +55,8 @@
   padding:12px;
   overflow:auto;
   }
-  
+
+  /*título da aba*/
   .card h2{
   margin:0 0 8px;
   color:var(--accent);
@@ -64,31 +65,38 @@
   }
   
   table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:14px;
+    width:100%;
+    border-collapse: collapse;
+    table-layout: fixed;   /* 🔒 trava alinhamento */
+    position: relative; 
   }
 
-  th, td{
-  padding: 10px 50px;
-  text-align:left;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  border-right: 1px solid rgba(255,255,255,0.012;
-  }
-  th:last-child,
-  td:last-child{
-  border-right: none;
-  width: 20px;
-  text-align: center;
+ /* cabeçalho */
+ thead th{
+    
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #0435bf;
+    color: #fff;
+    font-weight: 700;
+    padding: 8px;
+    text-align: left;
 }
 
-  thead th{
-  position:sticky;
-  top:0;
-  background:rgba(255,255,255,0.02);
-  }
+     
+/* células */
+th{
+  text-align: left;
+  font-weight: 700;
+  font-size:20px;
+   padding: 16px;
+}
+
+td{
+  text-align: left;
+   padding: 8px;
+}
   
   /* ícone atendido */
   td.status-icon{
