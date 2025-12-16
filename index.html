@@ -73,7 +73,7 @@
   width:100%;
   border-collapse:collapse;
                 overflow-y: auto;
-   /* table-layout: fixed;*/
+    table-layout: fixed;
   position: relative;
   }
 
@@ -149,11 +149,11 @@ tr.status-concluido  td.status-icon{color:#7CFC00;}
   margin-top:6px;
   }
  
-  /* Cabeçalho azul padrão
+  /* Cabeçalho azul padrão*/
 table thead th {
   background: #0435bf;
   color: white;
-}*/
+}
 
 /* status sempre centralizado */
 .col-status{
@@ -264,13 +264,11 @@ function formatCell(cell){
 
   return s;
 }
-
 const columnRules = [
   { match: /hora|hr/i, cls: "w-hora" },
   { match: /data/i, cls: "w-data" },
   { match: /status/i, cls: "w-status" }
 ]
-
 
 
 /* ============================
@@ -291,6 +289,12 @@ function renderTable(containerId, g){
 
   const cols = g.table.cols.map(c => c.label || "");
   const rows = Array.isArray(g.table.rows) ? g.table.rows : [];
+
+   // 🔑 aplica regras de largura por coluna
+  const colClasses = cols.map(h => {
+    const rule = columnRules.find(r => r.match.test(h));
+    return rule ? rule.cls : "w-auto";
+  });
 
   let html = "<table><thead><tr>";
   cols.forEach(h => html += `<th>${escapeHtml(h)}</th>`);
@@ -328,6 +332,7 @@ for (let i = 0; i < cols.length; i++){
   const isStatusCol = (i === cols.length - 1);
   const raw = formatCell(cells[i]);
   const txt = raw.toLowerCase();
+  const clsCol = colClasses[i];
 
   if (isStatusCol){
     // ATENDIDO / CONCLUÍDO → ✔
@@ -342,6 +347,14 @@ for (let i = 0; i < cols.length; i++){
     else if (txt.includes("andamento")){
       html += `<td class="status-icon">⏳</td>`;
     }
+      else{
+      html += `<td class="${clsCol}">${escapeHtml(raw)}</td>`;
+    }
+  }
+  else{
+    html += `<td class="${clsCol}">${escapeHtml(raw)}</td>`;
+  }
+}
     // fallback
     else{
       html += `<td>${escapeHtml(raw)}</td>`;
