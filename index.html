@@ -178,10 +178,10 @@ function formatCell(c){
 /* ================= RENDER ================= */
 function renderTable(containerId, g){
   const el=document.getElementById(containerId);
-  if(!g?.table?.cols){ el.innerHTML="Sem dados"; return; }
+ // if(!g?.table?.cols){ el.innerHTML="Sem dados"; return; }
 
-  const cols=g.table.cols.map(c=>c.label||"");
-  const rows=g.table.rows||[];
+  const cols = g?.table?.cols?.map(c => c.label || "") || [];
+  const rows = g?.table?.rows || [];
 
   const colClasses=cols.map(h=>{
     const r=columnRules.find(x=>x.match.test(h));
