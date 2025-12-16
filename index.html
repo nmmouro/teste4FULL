@@ -65,38 +65,31 @@
   }
   
   table{
-    width:100%;
-    border-collapse: collapse;
-    table-layout: fixed;   /* 🔒 trava alinhamento */
-    position: relative; 
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
   }
 
- /* cabeçalho */
- thead th{
-    
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    background: #0435bf;
-    color: #fff;
-    font-weight: 700;
-    padding: 8px;
-    text-align: left;
+  th, td{
+  padding: 10px 50px;
+  text-align:left;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  }
+  th:last-child,
+  td:last-child{
+  border-right: none;
+  width: 50px;
+  text-align: center;
 }
 
-     
-/* células */
-th{
-  text-align: left;
-  font-weight: 700;
-  font-size:20px;
-   padding: 16px;
-}
-
-td{
-  text-align: left;
-   padding: 8px;
-}
+  thead th{
+  position:sticky;
+  top:0;
+  background:rgba(255,255,255,0.02);
+  }
   
   /* ícone atendido */
   td.status-icon{
@@ -128,20 +121,6 @@ tr.status-concluido  td.status-icon{color:#7CFC00;}
 table thead th {
   background: #0435bf;
   color: white;
-}*/
-
-      /* larguras padrão 
-.col-xs { width: 50px;  max-width: 50px;  }
-.col-sm { width: 80px;  max-width: 80px;  }
-.col-md { width: 140px; max-width: 140px; }
-.col-lg { width: 220px; max-width: 220px; }
-.col-xl { width: 320px; max-width: 320px; }
-
-th[class^="col-"],
-td[  overflow: hidden;
-class^="col-"]{
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }*/
 
 /* status sempre centralizado */
