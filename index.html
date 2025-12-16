@@ -41,7 +41,7 @@ main{
   padding:12px;
   display:grid;
   grid-template-rows:1fr 1fr 1fr;
-  gap:12px;
+  gap:20px;
   height:calc(100vh - 80px);
 }
 
@@ -62,7 +62,7 @@ main{
 table{
   width:100%;
   border-collapse:collapse;
-  table-layout:fixed; /* 🔒 essencial */
+  table-layout:fixed;
 }
 
 th, td{
@@ -70,7 +70,7 @@ th, td{
   padding:12px 16px;
   white-space:nowrap;
   overflow:hidden;
-  text-align:left; //text-overflow:ellipsis;
+  text-overflow:ellipsis;
   font-weight:700;
 }
 
@@ -84,12 +84,12 @@ thead th{
 }
 
 /* larguras */
-.w-hora   { width:120px; text-align:left; }
-.w-data   { width:120px; }
-.w-status { width:120px; text-align:center; }
+.w-hora   { width:70px; text-align:center; }
+.w-data   { width:90px; }
+.w-status { width:50px; text-align:center; }
 .w-auto   { width:auto; }
 
-  /* linhas vazias quando não há dados */
+/* linhas vazias quando não há dados */
 table tbody:empty::after{
   content:"";
   display:block;
@@ -146,7 +146,7 @@ const TAB_PAINEL = "PAINEL";
 const TAB_AGENDA = "AGENDA DO DIA";
 const TAB_SS = "AGENDA SERVIÇO SOCIAL";
 
-/* regras de coluna */
+/* regras de largura por coluna */
 const columnRules = [
   { match:/hora|hr/i, cls:"w-hora" },
   { match:/data/i, cls:"w-data" },
@@ -155,19 +155,22 @@ const columnRules = [
 
 /* ================= CLOCK ================= */
 function updateClock(){
-  const n=new Date();
+  const n = new Date();
   clock.innerText =
     n.toLocaleDateString("pt-BR")+" — "+n.toLocaleTimeString("pt-BR");
 }
 setInterval(updateClock,1000); updateClock();
 
 /* ================= HELPERS ================= */
-const parseGvizText=t=>JSON.parse(t.substring(t.indexOf("{"),t.lastIndexOf("}")+1));
-const escapeHtml=s=>String(s??"").replace(/[&<>]/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;" }[m]));
+const parseGvizText = t =>
+  JSON.parse(t.substring(t.indexOf("{"), t.lastIndexOf("}") + 1));
+
+const escapeHtml = s =>
+  String(s ?? "").replace(/[&<>]/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;" }[m]));
 
 function formatCell(c){
   if(!c) return "";
-  if(typeof c==="object"){
+  if(typeof c === "object"){
     if(c.f) return c.f;
     if(c.v) return formatCell(c.v);
     return "";
@@ -177,71 +180,73 @@ function formatCell(c){
 
 /* ================= RENDER ================= */
 function renderTable(containerId, g){
-  const el=document.getElementById(containerId);
- // if(!g?.table?.cols){ el.innerHTML="Sem dados"; return; }
+  const el = document.getElementById(containerId);
 
   const cols = g?.table?.cols?.map(c => c.label || "") || [];
   const rows = g?.table?.rows || [];
 
-  const colClasses=cols.map(h=>{
-    const r=columnRules.find(x=>x.match.test(h));
-    return r?r.cls:"w-auto";
+  /* sempre renderiza a tabela */
+  const colClasses = cols.map(h => {
+    const r = columnRules.find(x => x.match.test(h));
+    return r ? r.cls : "w-auto";
   });
 
-  let html="<table><thead><tr>";
-  cols.forEach((h,i)=>html+=`<th class="${colClasses[i]}">${escapeHtml(h)}</th>`);
-  html+="</tr></thead><tbody>";
+  let html = "<table><thead><tr>";
 
-  rows.forEach(r=>{
-    const cells=r.c||[];
-    const status=String(cells.at(-1)?.f??cells.at(-1)?.v??"").toLowerCase();
-    
+  cols.forEach((h,i) =>
+    html += `<th class="${colClasses[i]}">${escapeHtml(h)}</th>`
+  );
+
+  html += "</tr></thead><tbody>";
+
+  rows.forEach(r => {
+    const cells = r.c || [];
+    const status = String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
+
     let rowCls="";
-    if(status.includes("cancelado")) rowCls="status-cancelado";
-    else if(status.includes("concluido")) rowCls="status-concluido";
-    else if(status.includes("andamento")) rowCls="status-andamento";
-    else if(status.includes("atendido")) rowCls="status-atendido";
+    if (status.includes("cancelado")) rowCls="status-cancelado";
+    else if (status.includes("concluido")) rowCls="status-concluido";
+    else if (status.includes("andamento")) rowCls="status-andamento";
+    else if (status.includes("atendido")) rowCls="status-atendido";
 
-    html+=`<tr class="${rowCls}">`;
+    html += `<tr class="${rowCls}">`;
 
-    cols.forEach((_,i)=>{
-      const raw=formatCell(cells[i]);
-      html+=`<td class="${cls}">${escapeHtml(raw)}</td>`;
-      });
-        html+="</tr>";
-      });
-      html += "</tbody></table>";
-      el.innerHTML = html;
+    cols.forEach((_,i) => {
+      const raw = formatCell(cells[i]);
+      html += `<td class="${colClasses[i]}">${escapeHtml(raw)}</td>`;
+    });
+
+    html += "</tr>";
+  });
+
+  html += "</tbody></table>";
+  el.innerHTML = html;
 }
-      const cls=colClasses[i];
-      if(i===cols.length-1){
-        if(/atendido|concluido/.test(status)) html+=`<td class="status-icon ${cls}">✔</td>`;
-        else if(/cancelado/.test(status)) html+=`<td class="status-icon ${cls}">✖</td>`;
-        else if(/andamento/.test(status)) html+=`<td class="status-icon ${cls}">⏳</td>`;
-        else html+=`<td class="${cls}">${escapeHtml(raw)}</td>`;
-      }else{
-      }
 
-  /* ================= FETCH ================= */
+/* ================= FETCH ================= */
 async function fetchSheet(tab){
-  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
-  const r=await fetch(url,{cache:"no-store"});
+  const url =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`+
+    `?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
+
+  const r = await fetch(url,{cache:"no-store"});
   return parseGvizText(await r.text());
 }
 
+/* ================= LOAD ================= */
 async function loadAll(){
-  const [p,a,s]=await Promise.all([
+  const [p,a,s] = await Promise.all([
     fetchSheet(TAB_PAINEL),
     fetchSheet(TAB_AGENDA),
     fetchSheet(TAB_SS)
   ]);
-  renderTable("painel",p);
-  renderTable("agenda",a);
-  renderTable("social",s);
+  renderTable("painel", p);
+  renderTable("agenda", a);
+  renderTable("social", s);
 }
 
 loadAll();
-setInterval(loadAll,60000);
+setInterval(loadAll, 60000);
 </script>
 
 </body>
