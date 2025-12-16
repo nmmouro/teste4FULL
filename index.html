@@ -84,10 +84,10 @@ thead th{
 }
 
 /* larguras */
-.w-hora   { width:120px; text-align:center; }
 .w-data   { width:120px; }
+.w-hora   { width:120px; text-align:center; }
+.w-periodo { width:120px; text-align:center; }
 .w-status { width:120px; text-align:center; }
-.w-periodo { width:120px; text-align:center; }  
 .w-auto   { width:auto; }
 
 /* linhas vazias quando não há dados */
@@ -151,8 +151,9 @@ const TAB_SS = "AGENDA SERVIÇO SOCIAL";
 const columnRules = [
   { match:/hora|hr/i, cls:"w-hora" },
   { match:/data/i, cls:"w-data" },
+  { match:/periodo|periodo/i, cls:"w-periodo" },
   { match:/status/i, cls:"w-status" }
-  { match:/periodo|periodo/i, cls:"w-periodo" }
+  
 ];
 
 /* ================= CLOCK ================= */
