@@ -87,7 +87,14 @@ thead th{
 .w-hora   { width:120px; text-align:left; }
 .w-data   { width:120px; }
 .w-status { width:120px; text-align:center; }
-.w-auto   { width:auto; text-align:left;}
+.w-auto   { width:auto; }
+
+  /* linhas vazias quando não há dados */
+table tbody:empty::after{
+  content:"";
+  display:block;
+  height:120px;
+}
 
 /* status */
 td.status-icon{text-align:center}
@@ -188,6 +195,7 @@ function renderTable(containerId, g){
   rows.forEach(r=>{
     const cells=r.c||[];
     const status=String(cells.at(-1)?.f??cells.at(-1)?.v??"").toLowerCase();
+    
     let rowCls="";
     if(status.includes("cancelado")) rowCls="status-cancelado";
     else if(status.includes("concluido")) rowCls="status-concluido";
@@ -198,6 +206,13 @@ function renderTable(containerId, g){
 
     cols.forEach((_,i)=>{
       const raw=formatCell(cells[i]);
+      html+=`<td class="${cls}">${escapeHtml(raw)}</td>`;
+      });
+        html+="</tr>";
+      });
+      html += "</tbody></table>";
+      el.innerHTML = html;
+}
       const cls=colClasses[i];
       if(i===cols.length-1){
         if(/atendido|concluido/.test(status)) html+=`<td class="status-icon ${cls}">✔</td>`;
@@ -205,17 +220,9 @@ function renderTable(containerId, g){
         else if(/andamento/.test(status)) html+=`<td class="status-icon ${cls}">⏳</td>`;
         else html+=`<td class="${cls}">${escapeHtml(raw)}</td>`;
       }else{
-        html+=`<td class="${cls}">${escapeHtml(raw)}</td>`;
       }
-    });
 
-    html+="</tr>";
-  });
-
-  el.innerHTML=html+"</tbody></table>";
-}
-
-/* ================= FETCH ================= */
+  /* ================= FETCH ================= */
 async function fetchSheet(tab){
   const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
   const r=await fetch(url,{cache:"no-store"});
