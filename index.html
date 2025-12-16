@@ -265,11 +265,12 @@ function formatCell(cell){
   return s;
 }
 
-   /* regras de largura por header
-{ match: /data|hora/i, cls: "col-sm" }
-{ match: /veiculo/i,  cls: "col-sm" }
-{ match: /itinerario/i, cls: "col-xl" }
- */
+const columnRules = [
+  { match: /hora|hr/i, cls: "w-hora" },
+  { match: /data/i, cls: "w-data" },
+  { match: /status/i, cls: "w-status" }
+];
+
 
 
 /* ============================
