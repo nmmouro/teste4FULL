@@ -103,15 +103,14 @@ thead th:last-child{
   border-top-right-radius:12px;
 }
 
-/* larguras */
-.w-data   { width:120px; left}
+/* larguras
+.w-data   { width:120px; }
 .w-hora   { width:120px; }
 .w-status { width:120px; }
 .w-auto   { width:auto; text-align:left;}
-
+*/
 /* linhas vazias quando não há dados */
-table tbody:empty::after{
-  content:"";
+table tbody:empty:after{
   display:block;
   height:120px;
 }
