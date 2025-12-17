@@ -56,7 +56,6 @@ main{
   margin:0 0 8px;
   color:var(--accent);
   font-size:18px;
-  text-align:left;
 }
 
 table{
@@ -65,19 +64,7 @@ table{
   border-spacing:0;
   table-layout:fixed;
 }
-    
-   /* mantém área do cabeçalho mesmo sem dados
-  table tbody:empty::after{
-  content:"Sem lançamentos";
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:220px;
-  opacity:.50;
-  font-style:italic;
-}*/
 
- 
 th, td{
   box-sizing:border-box;
   padding:12px 16px;
@@ -93,40 +80,34 @@ thead th{
   z-index:10;
   background:#0435bf;
 }
-  
-  /* bordas arredondadas somente nas pontas */
-thead th:first-child{
-  border-top-left-radius:12px;
-}
 
-thead th:last-child{
-  border-top-right-radius:12px;
-}
+thead th:first-child{border-top-left-radius:12px}
+thead th:last-child{border-top-right-radius:12px}
 
 /* larguras */
-.w-data   { width:50px; }
-.w-hora   { width:50px; }
-.w-veiculo { width:100px; }
-.w-empregado   { width:120px; }
-.w-passageiro { width:120px; }
-.w-periodo  { width:50px; }
-.w-setor   { width:50px; }
-.w-motivo { width:120px; }
-.w-status { width:50px; }
-.w-auto   { width:auto; text-align:left;}
+.w-data{width:50px}
+.w-hora{width:50px}
+.w-veiculo{width:100px}
+.w-empregado{width:120px}
+.w-passageiro{width:120px}
+.w-periodo{width:50px}
+.w-setor{width:50px}
+.w-motivo{width:120px}
+.w-status{width:50px;text-align:center}
+.w-auto{width:auto}
 
-/* linhas vazias quando não há dados */
-table tbody:empty:after{
+/* mantém tabela limpa quando vazia */
+table tbody:empty{
   display:block;
-  height:120px;
+  min-height:120px;
 }
 
 /* status */
 td.status-icon{text-align:center}
-tr.status-atendido  { background:rgba(147,219,112,.18) }
-tr.status-andamento { background:rgba(219,147,112,.18) }
-tr.status-concluido { background:rgba(0,200,120,.06) }
-tr.status-cancelado { background:rgba(255,0,0,.12) }
+tr.status-atendido{background:rgba(147,219,112,.18)}
+tr.status-andamento{background:rgba(219,147,112,.18)}
+tr.status-concluido{background:rgba(0,200,120,.06)}
+tr.status-cancelado{background:rgba(255,0,0,.12)}
 
 .small{
   font-size:12px;
@@ -171,128 +152,103 @@ const TAB_PAINEL = "PAINEL";
 const TAB_AGENDA = "AGENDA DO DIA";
 const TAB_SS = "AGENDA SERVIÇO SOCIAL";
 
-/* regras de largura por coluna */ 
-cconst tableColumnRules = {
+/* regras específicas por tabela */
+const tableColumnRules = {
   painel: [
     { match:/data/i, cls:"w-data" },
     { match:/hora/i, cls:"w-hora" },
-    { match:/veiculo/i, cls:"w-veiculo" },
+    { match:/ve[ií]culo/i, cls:"w-veiculo" },
     { match:/empregado/i, cls:"w-empregado" },
     { match:/status/i, cls:"w-status" }
   ],
-
   agenda: [
     { match:/data/i, cls:"w-data" },
     { match:/hora/i, cls:"w-hora" },
-    { match:/passageiro/i, cls:"w-.passageiro" },
+    { match:/passageiro/i, cls:"w-passageiro" },
     { match:/setor/i, cls:"w-setor" },
     { match:/status/i, cls:"w-status" }
   ],
-
   social: [
     { match:/data/i, cls:"w-data" },
-    { match:/periodo/i, cls:"w-periodo" },
-    { match:/passageiro/i, cls:"w-veiculo" },
+    { match:/per[ií]odo/i, cls:"w-periodo" },
+    { match:/passageiro/i, cls:"w-passageiro" },
     { match:/motivo/i, cls:"w-motivo" },
     { match:/status/i, cls:"w-status" }
   ]
 };
 
+function resolveColumnClass(tableId, header){
+  const rules = tableColumnRules[tableId] || [];
+  const rule = rules.find(r => r.match.test(header));
+  return rule ? rule.cls : "w-auto";
+}
 
 /* ================= CLOCK ================= */
 function updateClock(){
-  const n = new Date();
+  const n=new Date();
   clock.innerText =
     n.toLocaleDateString("pt-BR")+" — "+n.toLocaleTimeString("pt-BR");
 }
 setInterval(updateClock,1000); updateClock();
 
 /* ================= HELPERS ================= */
-const parseGvizText = t =>
-  JSON.parse(t.substring(t.indexOf("{"), t.lastIndexOf("}") + 1));
-
-const escapeHtml = s =>
-  String(s ?? "").replace(/[&<>]/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;" }[m]));
-
-function formatCell(c){
+const parseGvizText=t=>JSON.parse(t.substring(t.indexOf("{"),t.lastIndexOf("}")+1));
+const escapeHtml=s=>String(s??"").replace(/[&<>]/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;" }[m]));
+const formatCell=c=>{
   if(!c) return "";
-  if(typeof c === "object"){
-    if(c.f) return c.f;
-    if(c.v) return formatCell(c.v);
-    return "";
-  }
+  if(typeof c==="object") return c.f ?? formatCell(c.v);
   return String(c);
-}
+};
 
 /* ================= RENDER ================= */
-function renderTable(containerId, g){
-  const el = document.getElementById(containerId);
+function renderTable(containerId,g){
+  const el=document.getElementById(containerId);
+  const cols=g?.table?.cols?.map(c=>c.label||"")||[];
+  const rows=g?.table?.rows||[];
 
-  const cols = g?.table?.cols?.map(c => c.label || "") || [];
-  const rows = g?.table?.rows || [];
+  const colClasses=cols.map(h=>resolveColumnClass(containerId,h));
 
-  /* sempre renderiza a tabela */
-  const colClasses = cols.map(h => {
-    const r = columnRules.find(x => x.match.test(h));
-    return r ? r.cls : "w-auto";
-  });
+  let html="<table><thead><tr>";
+  cols.forEach((h,i)=>html+=`<th class="${colClasses[i]}">${escapeHtml(h)}</th>`);
+  html+="</tr></thead><tbody>";
 
-  let html = "<table><thead><tr>";
-
-  cols.forEach((h,i) =>
-    html += `<th class="${colClasses[i]}">${escapeHtml(h)}</th>`
-  );
-
-  html += "</tr></thead><tbody>";
-
-  rows.forEach(r => {
-    const cells = r.c || [];
-    const status = String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
-
+  rows.forEach(r=>{
+    const cells=r.c||[];
+    const status=String(cells.at(-1)?.f??cells.at(-1)?.v??"").toLowerCase();
     let rowCls="";
-    if (status.includes("cancelado")) rowCls="status-cancelado";
-    else if (status.includes("concluido")) rowCls="status-concluido";
-    else if (status.includes("andamento")) rowCls="status-andamento";
-    else if (status.includes("atendido")) rowCls="status-atendido";
+    if(status.includes("cancelado")) rowCls="status-cancelado";
+    else if(status.includes("concluido")) rowCls="status-concluido";
+    else if(status.includes("andamento")) rowCls="status-andamento";
+    else if(status.includes("atendido")) rowCls="status-atendido";
 
-    html += `<tr class="${rowCls}">`;
-
-    cols.forEach((_,i) => {
-      const raw = formatCell(cells[i]);
-      html += `<td class="${colClasses[i]}">${escapeHtml(raw)}</td>`;
-    });
-
-    html += "</tr>";
+    html+=`<tr class="${rowCls}">`;
+    cols.forEach((_,i)=>html+=`<td class="${colClasses[i]}">${escapeHtml(formatCell(cells[i]))}</td>`);
+    html+="</tr>";
   });
 
-  html += "</tbody></table>";
-  el.innerHTML = html;
-}
-
-/* ================= FETCH ================= */
-async function fetchSheet(tab){
-  const url =
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`+
-    `?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
-
-  const r = await fetch(url,{cache:"no-store"});
-  return parseGvizText(await r.text());
+  el.innerHTML=html+"</tbody></table>";
 }
 
 /* ================= LOAD ================= */
+async function fetchSheet(tab){
+  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
+  const r=await fetch(url,{cache:"no-store"});
+  return parseGvizText(await r.text());
+}
+
 async function loadAll(){
-  const [p,a,s] = await Promise.all([
+  const [p,a,s]=await Promise.all([
     fetchSheet(TAB_PAINEL),
     fetchSheet(TAB_AGENDA),
     fetchSheet(TAB_SS)
   ]);
-  renderTable("painel", p);
-  renderTable("agenda", a);
-  renderTable("social", s);
+  renderTable("painel",p);
+  renderTable("agenda",a);
+  renderTable("social",s);
 }
 
 loadAll();
-setInterval(loadAll, 60000);
+setInterval(loadAll,60000);
 </script>
 
 </body>
