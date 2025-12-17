@@ -77,19 +77,12 @@ th, td{
   font-weight:700;
 }
 
-  .sticky-header {
-  position: sticky;
-  top: 0; /* Define o ponto de fixação a 0 pixels do topo da viewport */
-  background-color: #0435bf;
-  padding: 10px;
-  z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
-}
-
-thead th{
+ thead th{
   position:sticky;
   top:0;
   z-index:1000;
   background:#0435bf;
+  padding: 10px;
 }
 
 thead th:first-child{border-top-left-radius:12px}
@@ -108,10 +101,6 @@ thead th:last-child{border-top-right-radius:12px}
 .w-status{width:220px;text-align:center text-align:left;}
 .w-auto{width:auto}
 
-/* mantém tabela limpa quando vazia */
-table tbody:empty{
-  display:block;
-  min-height:120px;
 }
 
 /* status */
