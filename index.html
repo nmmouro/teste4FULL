@@ -103,12 +103,18 @@ thead th:last-child{
   border-top-right-radius:12px;
 }
 
-/* larguras
+/* larguras */
 .w-data   { width:120px; }
 .w-hora   { width:120px; }
+.w-veiculo { width:120px; }
+.w-empregado   { width:120px; }
+.w-passageiro { width:120px; }
+.w-periodo  { width:120px; }
+.w-setor   { width:120px; }
+.w-motivo { width:120px; }
 .w-status { width:120px; }
 .w-auto   { width:auto; text-align:left;}
-*/
+
 /* linhas vazias quando não há dados */
 table tbody:empty:after{
   display:block;
@@ -165,12 +171,33 @@ const TAB_PAINEL = "PAINEL";
 const TAB_AGENDA = "AGENDA DO DIA";
 const TAB_SS = "AGENDA SERVIÇO SOCIAL";
 
-/* regras de largura por coluna 
-const columnRules = [
-  { match:/data/i, cls:"w-data" },
-  { match:/hora|hr/i, cls:"w-hora" },
-  { match:/status/i, cls:"w-status" }
-];*/
+/* regras de largura por coluna */ 
+cconst tableColumnRules = {
+  painel: [
+    { match:/data/i, cls:"w-data" },
+    { match:/hora/i, cls:"w-hora" },
+    { match:/veiculo/i, cls:"w-veiculo" },
+    { match:/empregado/i, cls:"w-empregado" },
+    { match:/status/i, cls:"w-status" }
+  ],
+
+  agenda: [
+    { match:/data/i, cls:"w-data" },
+    { match:/hora/i, cls:"w-hora" },
+    { match:/passageiro/i, cls:"w-.passageiro" },
+    { match:/setor/i, cls:"w-setor" },
+    { match:/status/i, cls:"w-status" }
+  ],
+
+  social: [
+    { match:/data/i, cls:"w-data" },
+    { match:/periodo/i, cls:"w-periodo" },
+    { match:/passageiro/i, cls:"w-veiculo" },
+    { match:/motivo/i, cls:"w-motivo" },
+    { match:/status/i, cls:"w-status" }
+  ]
+};
+
 
 /* ================= CLOCK ================= */
 function updateClock(){
