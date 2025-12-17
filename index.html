@@ -86,7 +86,8 @@ thead th{
 /* larguras */
 .w-data   { width:120px; }
 .w-hora   { width:120px; text-align:center; }
-.w-empregado { width:250px; text-align:center; }  
+.w-empregado { width:250px; text-align:center; }
+.w-passageiro/ motivo { width:350px; text-align:center; } 
 .w-status { width:120px; text-align:center; }
 .w-auto   { width:auto; text-align:left;}
 
@@ -152,6 +153,7 @@ const columnRules = [
   { match:/data/i, cls:"w-data" },
   { match:/hora|hr/i, cls:"w-hora" },
   { match:/empregado/i, cls:"w-empregado" },
+  { match:/passageiro/ motivo/i, cls:"w-passageiro/ motivo" },
   { match:/status/i, cls:"w-status" }
 ];
 
