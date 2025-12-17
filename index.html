@@ -35,7 +35,7 @@ header{
 }
 
 header img{height:66px}
-header .title{font-size:20px;font-weight:700;color:var(--accent)}
+header .title{font-size:24px;font-weight:700;color:var(--accent)}
 header .clock{font-size:20px;color:var(--muted)}
 
 main{
@@ -77,12 +77,20 @@ th, td{
   font-weight:700;
 }
 
+  .sticky-header {
+  position: sticky;
+  top: 0; /* Define o ponto de fixação a 0 pixels do topo da viewport */
+  background-color: #fff;
+  padding: 10px;
+  z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
+}
+/*
 thead th{
   position:sticky;
   top:0;
-  z-index:10;
+  z-index:1000;
   background:#0435bf;
-}
+}*/
 
 thead th:first-child{border-top-left-radius:12px}
 thead th:last-child{border-top-right-radius:12px}
