@@ -93,6 +93,7 @@ thead th:last-child{border-top-right-radius:12px}
 .w-periodo{width:250px}
 .w-setor{width:120px}
 .w-motivo{width:320px}
+  .w-itinerario{width:320px}
 .w-status{width:220px;text-align:center}
 .w-auto{width:auto}
 
@@ -159,6 +160,7 @@ const tableColumnRules = {
     { match:/hora/i, cls:"w-hora" },
     { match:/ve[ií]culo/i, cls:"w-veiculo" },
     { match:/empregado/i, cls:"w-empregado" },
+    { match:/itinerario/i, cls:"w-itinerario" },
     { match:/status/i, cls:"w-status" }
   ],
   agenda: [
@@ -166,6 +168,7 @@ const tableColumnRules = {
     { match:/hora/i, cls:"w-hora" },
     { match:/passageiro/i, cls:"w-passageiro" },
     { match:/setor/i, cls:"w-setor" },
+    { match:/itinerario/i, cls:"w-itinerario" },
     { match:/status/i, cls:"w-status" }
   ],
   social: [
@@ -173,6 +176,7 @@ const tableColumnRules = {
     { match:/per[ií]odo/i, cls:"w-periodo" },
     { match:/passageiro/i, cls:"w-passageiro" },
     { match:/motivo/i, cls:"w-motivo" },
+    { match:/itinerario/i, cls:"w-itinerario" },
     { match:/status/i, cls:"w-status" }
   ]
 };
