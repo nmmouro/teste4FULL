@@ -42,7 +42,7 @@ main{
   display:grid;
   grid-template-rows:1fr 1fr 1fr;
   gap:12px;
-  height:calc(100vh - 10px);
+  height:calc(100vh - 92px);
 }
 
 .card{
@@ -58,13 +58,14 @@ main{
   font-size:18px;
   text-align:left;
 }
-/*
+
 table{
   width:100%;
   border-collapse:separate;
   border-spacing:0;
   table-layout:fixed;
-}*/
+}
+  
    /* mantém área do cabeçalho mesmo sem dados */
   table tbody:empty::after{
   content:"Sem lançamentos";
@@ -72,9 +73,8 @@ table{
   align-items:center;
   justify-content:center;
   height:220px;
-  opacity:.35;
+  opacity:.50;
   font-style:italic;
-    width:100%;
 }
 
  
