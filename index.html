@@ -65,7 +65,18 @@ table{
   border-spacing:0;
   table-layout:fixed;
 }
+   /* mantém área do cabeçalho mesmo sem dados */
+  table tbody:empty::after{
+  content:"Sem lançamentos";
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:120px;
+  opacity:.35;
+  font-style:italic;
+}
 
+ 
 th, td{
   box-sizing:border-box;
   padding:12px 16px;
@@ -79,7 +90,7 @@ thead th{
   position:sticky;
   top:0;
   z-index:10;
-  background:#0435bf;
+  background:#0435bf !important;
   color:#fff;
   font-size:18px;
   font-weight:700;
