@@ -61,7 +61,8 @@ main{
 
 table{
   width:100%;
-  border-collapse:collapse;
+  border-collapse:separate;
+  border-spacing:0;
   table-layout:fixed;
 }
 
@@ -81,6 +82,17 @@ thead th{
   background:#0435bf;
   color:#fff;
   font-size:18px;
+  font-weight:700;
+  padding:16px;
+}
+  
+  /* bordas arredondadas somente nas pontas */
+thead th:first-child{
+  border-top-left-radius:12px;
+}
+
+thead th:last-child{
+  border-top-right-radius:12px;
 }
 
 /* larguras */
